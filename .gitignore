@@ -1,0 +1,11 @@
+.vs/
+*.user
+obj/
+.asset
+.log
+.info
+.bin
+.mdb
+.stamp
+.meta
+.prefs
