@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -9,6 +10,12 @@ public class Player : MonoBehaviour
     /*Creating a reference to the animator attached to the player character which 
      * allows the animations to be controlled from this class*/
     Animator animator;
+    /*Creating an array of Images to handle the toggling of player health hearts in the game*/
+    public Image[] hearts;
+    /*An integer to limit the maximum health achievable by the player*/
+    public int maxHealth;
+    /*An integer to keep track of the players current health value*/
+    int currentHealth;
     void Start()
     {
         /*This is how we get the reference to the Animator*/
@@ -34,15 +41,15 @@ public class Player : MonoBehaviour
              * based on the values I defined in Unity*/
             transform.Translate(0, speed * Time.deltaTime, 0); animator.SetInteger("Direction", 0); animator.speed = 1;
         }
-        if (Input.GetKey(KeyCode.S))
+       else if (Input.GetKey(KeyCode.S))
         {
             transform.Translate(0, -speed * Time.deltaTime, 0); animator.SetInteger("Direction", 1); animator.speed = 1;
         }
-        if (Input.GetKey(KeyCode.A))
+       else if (Input.GetKey(KeyCode.A))
         {
             transform.Translate(-speed * Time.deltaTime, 0, 0); animator.SetInteger("Direction", 2); animator.speed = 1;
         }
-        if (Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.D))
         {
             transform.Translate(speed * Time.deltaTime, 0, 0); animator.SetInteger("Direction", 3); animator.speed = 1;
         }
