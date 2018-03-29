@@ -22,9 +22,10 @@ GameObject:
   - component: {fileID: 212523665784366718}
   - component: {fileID: 61994819166712296}
   - component: {fileID: 50650080296478430}
+  - component: {fileID: 114762762051749620}
   m_Layer: 0
   m_Name: Sword
-  m_TagString: Untagged
+  m_TagString: Sword
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -87,6 +88,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
   m_EdgeRadius: 0
+--- !u!114 &114762762051749620
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1065928857561504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e635c701039833a4e9a68a9aa2a0a340, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  specialAttack: 0
+  swordParticleEffect: {fileID: 1564526874130236, guid: 2a2d81ddbca5df14fb5e9160b49b81a0,
+    type: 2}
 --- !u!212 &212523665784366718
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -5,8 +5,10 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    //A float to control the speed of the players movement
+    /*A float to control the speed of the players movement*/
     public float speed;
+    /*A float to control the speed of the players sword thrust*/
+    public float thrustAmount;
     /*Creating a reference to the animator attached to the player character which 
      * allows the animations to be controlled from this class*/
     Animator animator;
@@ -18,6 +20,10 @@ public class Player : MonoBehaviour
     int currentHealth;
     /*Creating a reference to the sword the player will use*/
     public GameObject sword;
+    /*A boolean to check if they player can move or not..*/
+    public bool canMove;
+    /*A boolean to ensure there can only be one sword active at a time*/
+    public bool canAttack;
     /*The start method is used to initialise everything required at the START of the game (mind = blown)*/
     void Start()
     {
@@ -27,7 +33,10 @@ public class Player : MonoBehaviour
         currentHealth = maxHealth;
         /*Calling GetHealth in case the players health is changed in the inspector*/
         GetHealth();
-
+        /*Setting canMove to true when the game starts*/
+        canMove = true;
+        /*Setting canAttack to true when the game starts*/
+        canAttack = true;
     }
     /*A method to get the players current health and draw the correct amount of hearts to the screen*/
     void GetHealth()
@@ -51,11 +60,11 @@ public class Player : MonoBehaviour
         GetHealth();
         /*Ensuring the players health can never go above the max health value by
          * checking if it has and if so, setting it to equal max health*/
-         if (currentHealth > maxHealth)
+        if (currentHealth > maxHealth)
         {
             currentHealth = maxHealth;
         }
-         if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
             Attack();
         }
@@ -63,33 +72,63 @@ public class Player : MonoBehaviour
     /*A method which contains the code for the players attacks*/
     void Attack()
     {
+        /*Checking if canAttack is false and if so, ensuring the Attack code doesn't execute*/
+        if (canAttack == false)
+            return;
+        /*The player should not be able to move when they are attacking*/
+        canMove = false;
+        /*Setting canAttack to be false as soon as the player has attacked*/
+        canAttack = false;
         /*Creating a new GameObject when the player attacks by instantiating the sword,
          * setting its position and then setting its rotation*/
         GameObject newSword = Instantiate(sword, transform.position, sword.transform.rotation);
+        /*Checking if the players health is at the maximum available and if so allowing the special attack to be used*/
+        if (currentHealth == maxHealth)
+        {
+            newSword.GetComponent<Sword>().specialAttack = true;
+            canMove = true;
+            /*Also making the sword faster when using the special attack*/
+            thrustAmount = 400;
+        }
+        #region /*SwordRotation*/
         /*swordDirection is a temporary variable only available within the Attack method and is used
          * to handle the rotation of the sword when it is spawned in the game.*/
         int swordDirection = animator.GetInteger("Direction");
+        /*Setting the animators attack direction integer to equal the swordDirection since the player
+         * can only attack in the way it is facing*/
+        animator.SetInteger("AttackDirection", swordDirection);
         /*Using the same Direction integer I created previously for the players movement animations*/
         if (swordDirection == 0) /* 0 = Up*/
         {
             newSword.transform.Rotate(0, 0, 0);
+            /*Getting the RigidBody2D component which is attached to the sword in Unity
+             * this allows control of all kinds of physics which can be applied to the sword.
+             * In this case I am using .AddForce() to thrust the sword in a direction.*/
+            newSword.GetComponent<Rigidbody2D>().AddForce(Vector2.up * thrustAmount);
         }
         else if (swordDirection == 1) /* 1 = Down */
         {
             newSword.transform.Rotate(0, 0, 180);
+            newSword.GetComponent<Rigidbody2D>().AddForce(Vector2.up * -thrustAmount);
         }
         else if (swordDirection == 2) /* 2 = Left */
         {
             newSword.transform.Rotate(0, 0, 90);
+            newSword.GetComponent<Rigidbody2D>().AddForce(Vector2.right * -thrustAmount);
         }
         else if (swordDirection == 3) /* 3 = Right */
         {
             newSword.transform.Rotate(0, 0, -90);
+            newSword.GetComponent<Rigidbody2D>().AddForce(Vector2.right * thrustAmount);
         }
+        #endregion
     }
     /*A method which contains the code required for the players movement*/
     void Movement()
     {
+        /*Ensures all code stops executing if canMove is false*/
+        if (canMove == false)
+            return;
         /*Checking for keypresses and moving the player*/
         if (Input.GetKey(KeyCode.W))
         {
