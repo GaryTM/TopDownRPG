@@ -16,7 +16,7 @@ public class Crab : MonoBehaviour {
     public GameObject deathParticleEffect;
     /*A reference to the SpriteRenderer allowing the sprites which are drawn to be switched*/
     SpriteRenderer spriteRenderer;
-    /*A Sprite for the crab facing up sprite*/
+    /*A Sprite for the crab facing each way*/
     public Sprite facingUp;
     public Sprite facingDown;
     public Sprite facingLeft;
@@ -25,7 +25,7 @@ public class Crab : MonoBehaviour {
     void Start ()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        direction = 0;
+        direction = Random.Range(0, 3);
 	}
 	
 	void Update ()
@@ -82,6 +82,28 @@ public class Crab : MonoBehaviour {
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().canAttack = true;
                 Destroy(collision.gameObject);
             }
+        }
+    }
+    /*Checking if the crab collides with the player and ensuring health is removed*/
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            /*Decreasing the crab health by 1*/
+            health--;
+            /*Decreasing the players health by getting the component of the script*/
+            collision.gameObject.GetComponent<Player>().currentHealth--;
+            /*Removing the crab if health falls to 0*/
+            if (health <= 0)
+            {
+                Instantiate(deathParticleEffect, transform.position, transform.rotation);
+                Destroy(gameObject);
+            }
+        }
+        /*Checking the crabs collisions with walls and making it turn*/
+        if (collision.gameObject.tag == "Wall")
+        {
+            direction = Random.Range(0, 3);
         }
     }
 }

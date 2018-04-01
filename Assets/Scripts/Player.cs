@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     /*An integer to limit the maximum health achievable by the player*/
     public int maxHealth;
     /*An integer to keep track of the players current health value*/
-    int currentHealth;
+    public int currentHealth;
     /*Creating a reference to the sword the player will use*/
     public GameObject sword;
     /*A boolean to check if they player can move or not..*/
