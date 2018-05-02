@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Crab : MonoBehaviour {
+public class Crab : MonoBehaviour
+{
 
     /*An integer to store the crabs health*/
     public int health;
@@ -91,8 +92,14 @@ public class Crab : MonoBehaviour {
         {
             /*Decreasing the crab health by 1*/
             health--;
-            /*Decreasing the players health by getting the component of the script*/
-            collision.gameObject.GetComponent<Player>().currentHealth--;
+            /*Checking if the players invincibility frames are not active then...*/
+            if (collision.gameObject.GetComponent<Player>().invincibilityFrames == false)
+            {
+                /*Decreasing the players health by getting the component of the script*/
+                collision.gameObject.GetComponent<Player>().currentHealth--;
+                /*Activate the i frames*/
+                collision.gameObject.GetComponent<Player>().invincibilityFrames = true;
+            }
             /*Removing the crab if health falls to 0*/
             if (health <= 0)
             {

@@ -584,10 +584,10 @@ TextureImporter:
       name: EnemiesSpriteSheet_32
       rect:
         serializedVersion: 2
-        x: 387
-        y: 643
-        width: 50
-        height: 39
+        x: 397
+        y: 645
+        width: 38
+        height: 36
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -598,10 +598,10 @@ TextureImporter:
       name: EnemiesSpriteSheet_33
       rect:
         serializedVersion: 2
-        x: 460
-        y: 643
-        width: 49
-        height: 42
+        x: 462
+        y: 645
+        width: 36
+        height: 36
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -668,10 +668,10 @@ TextureImporter:
       name: EnemiesSpriteSheet_38
       rect:
         serializedVersion: 2
-        x: 397
-        y: 570
-        width: 52
-        height: 50
+        x: 398
+        y: 581
+        width: 36
+        height: 36
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -682,10 +682,10 @@ TextureImporter:
       name: EnemiesSpriteSheet_39
       rect:
         serializedVersion: 2
-        x: 460
-        y: 570
-        width: 39
-        height: 50
+        x: 462
+        y: 581
+        width: 36
+        height: 36
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -869,7 +869,7 @@ TextureImporter:
         width: 22
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

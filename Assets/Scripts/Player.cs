@@ -5,15 +5,19 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    /*Creating a reference to the animator attached to the player character which 
+    * allows the animations to be controlled from this class*/
+    Animator animator;
+    /*Creating an array of Images to handle the toggling of player health hearts in the game*/
+    public Image[] hearts;
+    /*Getting a reference to the SpriteRenderer*/
+    SpriteRenderer spriteRenderer;
     /*A float to control the speed of the players movement*/
     public float speed;
     /*A float to control the speed of the players sword thrust*/
     public float thrustAmount;
-    /*Creating a reference to the animator attached to the player character which 
-     * allows the animations to be controlled from this class*/
-    Animator animator;
-    /*Creating an array of Images to handle the toggling of player health hearts in the game*/
-    public Image[] hearts;
+    /*A timer for the duration of the invincibility frames*/
+    public float invincibilityTimer = 1.0f;
     /*An integer to limit the maximum health achievable by the player*/
     public int maxHealth;
     /*An integer to keep track of the players current health value*/
@@ -24,11 +28,15 @@ public class Player : MonoBehaviour
     public bool canMove;
     /*A boolean to ensure there can only be one sword active at a time*/
     public bool canAttack;
+    /*A boolean to check if the players invincibility frames are currently active*/
+    public bool invincibilityFrames;
     /*The start method is used to initialise everything required at the START of the game (mind = blown)*/
     void Start()
     {
         /*This is how we get the reference to the Animator*/
         animator = GetComponent<Animator>();
+        /*...and the SpriteRenderer*/
+        spriteRenderer = GetComponent<SpriteRenderer>();
         /*Setting the players current health to equal the maximum at the start of the game*/
         currentHealth = maxHealth;
         /*Calling GetHealth in case the players health is changed in the inspector*/
@@ -37,20 +45,8 @@ public class Player : MonoBehaviour
         canMove = true;
         /*Setting canAttack to true when the game starts*/
         canAttack = true;
-    }
-    /*A method to get the players current health and draw the correct amount of hearts to the screen*/
-    void GetHealth()
-    {
-        /*Looping through and disabling all of the heart sprites*/
-        for (int i = 0; i <= hearts.Length - 1; i++)
-        {
-            hearts[i].gameObject.SetActive(false);
-        }
-        /*Looping through and drawing the correct amount of hearts based on the players health*/
-        for (int i = 0; i <= currentHealth - 1; i++)
-        {
-            hearts[i].gameObject.SetActive(true);
-        }
+        /*Ensuring the invincibility frames are not active when the game starts*/
+        invincibilityFrames = false;
     }
     void Update()
     {
@@ -67,6 +63,42 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             Attack();
+        }
+        /*If the i frames are active, the timer will decrease each frame*/
+        if (invincibilityFrames == true)
+        {
+            invincibilityTimer -= Time.deltaTime;
+            /*Creating an RNG integer to flicker the sprite when i frames are active*/
+            int randomNumber = Random.Range(0, 100);
+            if (randomNumber < 50)
+            {
+                spriteRenderer.enabled = false;
+            }
+            if (randomNumber > 50)
+            {
+                spriteRenderer.enabled = true;
+            }
+            /*Reset everything when the timer reaches 0*/
+            if (invincibilityTimer <= 0) 
+            {
+                invincibilityFrames = false;
+                invincibilityTimer = 1.0f;
+                spriteRenderer.enabled = true;
+            }
+        }
+    }
+    /*A method to get the players current health and draw the correct amount of hearts to the screen*/
+    void GetHealth()
+    {
+        /*Looping through and disabling all of the heart sprites*/
+        for (int i = 0; i <= hearts.Length - 1; i++)
+        {
+            hearts[i].gameObject.SetActive(false);
+        }
+        /*Looping through and drawing the correct amount of hearts based on the players health*/
+        for (int i = 0; i <= currentHealth - 1; i++)
+        {
+            hearts[i].gameObject.SetActive(true);
         }
     }
     /*A method which contains the code for the players attacks*/
