@@ -7,6 +7,8 @@ public class Dragon : MonoBehaviour
     /*Creating a reference to the animator attached to the dragon character which 
     * allows the animations to be controlled from this class*/
     Animator animator;
+    /*The dragon death particle effect*/
+    public GameObject deathParticleEffect;
     /*A float to control the speed of the Dragons movement*/
     public float speed;
     /*A timer for direction changes*/
@@ -77,7 +79,36 @@ public class Dragon : MonoBehaviour
             {
                 /*Destroy the dragon*/
                 Destroy(gameObject);
+                /*Show the death particle effect*/
+                Instantiate(deathParticleEffect, transform.position, transform.rotation);
             }
+        }
+    }
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            /*Decreasing the dragon health by 1*/
+            health--;
+            /*Checking if the players invincibility frames are not active then...*/
+            if (collision.gameObject.GetComponent<Player>().invincibilityFrames == false)
+            {
+                /*Decreasing the players health by getting the component of the script*/
+                collision.gameObject.GetComponent<Player>().currentHealth--;
+                /*Activate the i frames*/
+                collision.gameObject.GetComponent<Player>().invincibilityFrames = true;
+            }
+            /*Removing the dragon if health falls to 0*/
+            if (health <= 0)
+            {
+                Instantiate(deathParticleEffect, transform.position, transform.rotation);
+                Destroy(gameObject);
+            }
+        }
+        /*Checking the crabs collisions with walls and making it turn*/
+        if (collision.gameObject.tag == "Wall")
+        {
+            direction = Random.Range(0, 3);
         }
     }
 }
