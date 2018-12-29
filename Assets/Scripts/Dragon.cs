@@ -9,35 +9,85 @@ public class Dragon : MonoBehaviour
     Animator animator;
     /*The dragon death particle effect*/
     public GameObject deathParticleEffect;
+    /*The dragons projectile for attacking*/
+    public GameObject projectile;
     /*A float to control the speed of the Dragons movement*/
     public float speed;
+    /*A float for how powerful the dragons attack should travel*/
+    public float firePower;
     /*A timer for direction changes*/
     float directionTimer = 0.75f;
+    /*A float used to delay attacks, ensuring the dragon can't spam attack*/
+    float attackTimer = 1.5f;
     /*An int for the dragons health*/
     public int health;
     /*An int that will be used to change the direction of the dragon*/
     int direction;
+    /*A boolean to check if the enemy dragon is currently able to attack*/
+    bool canAttack;
+  
     void Start ()
     {
         /*This is how we get the reference to the Animator*/
         animator = GetComponent<Animator>();
         /*Randomising the dragons direction when the game starts*/
         direction = Random.Range(0, 3);
-
+        /*The dragon is unable to attack to begin with*/
+        canAttack = false;
     }
 	
 	void Update ()
     {
-        /*Reducing the timer*/
+        /*Reducing the timers*/
         directionTimer -= Time.deltaTime;
+        attackTimer -= Time.deltaTime;
         /*Moving the dragon accordingly*/
         if (directionTimer <= 0)
         {
             directionTimer = 0.75f;
             direction = Random.Range(0, 3);
         }
+        /*Reset the attackTimer if it reaches 0 and set canAttack to true*/
+        if (attackTimer <= 0)
+        {
+            attackTimer = 1.5f;
+            canAttack = true;
+        }
         Movement();
+        Attack();
 	}
+    /*A method which contains all the code for the dragons attacks*/
+    void Attack()
+    {
+        if (canAttack == false)
+        {
+            /*If the dragon cannot attack, don't run anymore code in this method*/
+            return;
+        }
+        canAttack = false;
+        if (direction == 0) /* 0 = Up */
+        {
+            /*Creating a new game object using instantiate allows the rigidbody to be manipulated in code*/
+            GameObject newProjectile = Instantiate(projectile, transform.position, transform.rotation);
+            /*Getting the rigidbody of the projectile and firing it based on direction*/
+            newProjectile.GetComponent<Rigidbody2D>().AddForce(Vector2.up * firePower);
+        }
+        else if (direction == 1) /* 1 = Down*/
+        {
+            GameObject newProjectile = Instantiate(projectile, transform.position, transform.rotation);
+            newProjectile.GetComponent<Rigidbody2D>().AddForce(Vector2.up * -firePower);
+        }
+        else if(direction == 2) /* 2 = Left*/
+        {
+            GameObject newProjectile = Instantiate(projectile, transform.position, transform.rotation);
+            newProjectile.GetComponent<Rigidbody2D>().AddForce(Vector2.right * -firePower);
+        }
+        else if(direction == 3) /* 3 = Right */
+        {
+            GameObject newProjectile = Instantiate(projectile, transform.position, transform.rotation);
+            newProjectile.GetComponent<Rigidbody2D>().AddForce(Vector2.right * firePower);
+        }
+    }
     /*A method which contains all code for the dragons movement*/
     void Movement()
     {
@@ -72,6 +122,7 @@ public class Dragon : MonoBehaviour
             /*Creating the particle effect from the component of the sword class*/
             collision.gameObject.GetComponent<Sword>().CreateParticle();
             GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().canAttack = true;
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().canMove = true;
             /*Destroy the sword*/
             Destroy(collision.gameObject);
             health--;

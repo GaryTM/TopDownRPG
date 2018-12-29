@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Sword
+  - EnemyProjectile
+  - Wall
   layers:
   - Default
   - TransparentFX

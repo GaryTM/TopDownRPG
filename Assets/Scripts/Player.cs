@@ -185,4 +185,19 @@ public class Player : MonoBehaviour
         }
         else animator.speed = 0;
     }
+    /*A method to check for collisions with game objects which are triggers*/
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        /*Lose one health is the enemy shoots the player and remove the projectile from the scene*/
+        if (collision.gameObject.tag == "EnemyProjectile")
+        {
+            if (invincibilityFrames == false)
+            {
+                invincibilityFrames = true;
+                currentHealth--;
+            }
+            collision.gameObject.GetComponent<Projectile>().CreateParticle();
+            Destroy(collision.gameObject);
+        }
+    }
 }
